@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  server:
+    build: ./
+    container_name: youtube_clone
+    image: youtube_clone
+    ports:
+      - "8080:3000"
+    restart: always
+    volumes:
+      - /app/node_modules
+      - .:/app
