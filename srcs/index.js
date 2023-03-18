@@ -9,6 +9,9 @@ const logger = morgan("dev"); // server log options : combined, common, dev, sho
 
 const PORT = 3000;
 
+app.set('view engine', 'pug');
+app.set("views", process.cwd() + "/srcs/views");
+
 app.use(logger);
 
 app.use("/", globalRouter);

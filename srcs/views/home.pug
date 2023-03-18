@@ -1,0 +1,10 @@
+extends base.pug
+include mixins/video.pug
+
+block content
+	h2 welcome youtube clone
+	ul
+		each item in videos
+			+videoInfo(item)
+		else
+			li No video found
