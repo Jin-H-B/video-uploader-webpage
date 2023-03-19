@@ -1,3 +1,4 @@
+import "./db.js"; // connect to mongodb
 import express from "express"; // web server
 import morgan from "morgan"; // server logger
 import globalRouter from "./routers/globalRouter";

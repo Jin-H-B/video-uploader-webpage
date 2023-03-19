@@ -23,4 +23,7 @@ express install : https://expressjs.com/en/starter/installing.html <br>
 babel install : https://babeljs.io/setup#installation <br>
 babel nodemon dev : https://babeljs.io/setup#installation <br>
 
+#### mongo db installation
+https://www.mongodb.com/docs/manual/installation/
+https://www.mongodb.com/docs/manual/tutorial/install-mongodb-community-with-docker/
 

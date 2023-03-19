@@ -17,6 +17,7 @@ RUN npm install @babel/core @babel/node --save-dev
 
 RUN npm install -g morgan
 RUN npm install -g pug
+RUN npm install -g mongoose
 
 COPY . .
 

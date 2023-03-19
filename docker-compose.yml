@@ -11,3 +11,16 @@ services:
     volumes:
       - /app/node_modules
       - .:/app
+    networks:
+      - intra
+  mongo:
+    image: mongo
+    container_name: mongo
+    volumes:
+      - /Users/jinhyeok/Desktop/frontend/youtube_clone/database/:/data/db
+    networks:
+      - intra
+
+networks:
+  intra:
+    driver: bridge
