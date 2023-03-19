@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 mongoose.connect(
-	'mongodb://mongo:27017', // mongodb://[container name or ipddress]:27017
+	'mongodb://mongo:27017/videodb', // mongodb://[container name or ipddress]:27017/[dbname]
 	{ useNewUrlParser: true, useUnifiedTopology : true },
 );
 

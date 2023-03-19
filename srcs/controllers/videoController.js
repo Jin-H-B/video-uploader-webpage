@@ -1,76 +1,81 @@
-const fakeUser = {
-	username: "whaleshade",
-	loggedIn: false
+import Video from "../models/videoSchema.js";
+
+export const handleVideoTrending = async (req, res) => {
+	const videos = await Video.find({}).sort({ createdAt: "desc" });;
+	return res.render("home.pug", { pageTitle: "Home", videos:videos });
 };
 
-let videos = [
-	{
-		title: "video #1",
-		rating: 4,
-		comments: 2,
-		createdAt: "45 minutes ago",
-		views: 3,
-		id: 1,
-	},
-	{
-		title: "video #2",
-		rating: 5,
-		comments: 2,
-		createdAt: "32 minutes ago",
-		views: 79,
-		id: 2,
-	},
-	{
-		title: "video #3",
-		rating: 3,
-		comments: 24,
-		createdAt: "26 minutes ago",
-		views: 67,
-		id: 3,
+export const handleVideoWatch = async (req, res) => {
+	const { id } = req.params;
+	const video = await Video.findById(id);
+	if (!video) {
+		return res.render("404.pug", { pageTitle: "Video not found." });
 	}
-]
-
-export const handleVideoTrending = (req, res) => {
-	return res.render("home.pug", { pageTitle : "HOME", fakeUser:fakeUser, videos:videos });
+	return res.render("watch.pug", { pageTitle: video.title, video:video });
 };
 
-export const handleVideoWatch = (req, res) => {
-	const id = req.params.id;
-	const video = videos[id - 1];
-	return res.render("watch.pug", { pageTitle : `Watching ${video.title}`, fakeUser:fakeUser, id:id, video:video });
+export const handleVideoEditGET = async (req, res) => {
+	const { id } = req.params;
+	const video = await Video.findById(id);
+	if (!video) {
+		return res.render("404.pug", { pageTitle: "Video not found." });
+	}
+	return res.render("edit.pug", { pageTitle: `Edit: ${video.title}`, video });
 };
 
-export const handleVideoEditGET = (req, res) => {
-	const id = req.params.id;
-	const video = videos[id - 1];
-	return res.render("edit.pug", { pageTitle : `Editing: ${video.title}`, fakeUser:fakeUser, video:video });
-};
-
-export const handleVideoEditPOST = (req, res) => {
-	const id = req.params.id;
-	const title = req.body.title;
-	videos[id - 1].title = title;
+export const handleVideoEditPOST = async (req, res) => {
+	const { id } = req.params;
+	const { title, description, hashtags } = req.body;
+	const video = await Video.exists({ _id: id });
+	if (!video) {
+		return res.render("404,pug", { pageTitle: "Video not found" });
+	}
+	await Video.findByIdAndUpdate(id, {
+		title,
+		description,
+		hashtags: Video.formatHashtags(hashtags),
+	});
 	return res.redirect(`/videos/${id}`);
 };
 
 export const handleVideoUploadGET = (req, res) => {
-	return res.render("upload", { pageTitle: "Upload Video", fakeUser:fakeUser });
+	return res.render("upload.pug", { pageTitle: "Upload Video" });
 };
 
-export const handleVideoUploadPOST = (req, res) => {
-	const { title } = req.body;
-	const newVideo = {
-		title,
-		rating: 0,
-		comments: 0,
-		createdAt: "just now",
-		views: 0,
-		id: videos.length + 1,
-	};
-	videos.push(newVideo);
-	return res.redirect("/");
+export const handleVideoUploadPOST = async (req, res) => {
+	const { title, description, hashtags } = req.body;
+	try {
+		await Video.create({
+			title,
+			description,
+			hashtags: Video.formatHashtags(hashtags),
+		});
+		return res.redirect("/");
+	} catch (error) {
+		return res.render("upload", {
+			pageTitle: "Upload Video",
+			errorMessage: error._message,
+		});
+	}
 };
 
-export const handleVideoSearch = (req, res) => res.send("VIDEO SEARCH PAGE");
+export const handleVideoSearch = async (req, res) => {
+	const { keyword } = req.query;
+	let videos = [];
+	if (keyword) {
+		videos = await Video.find({
+			title: {
+				$regex: new RegExp(`${keyword}$`, "i"),
+			},
+		});
+	}
+	return res.render("search.pug", { pageTitle: "Search", videos:videos });
+};
+
 export const handleVideoUpload = (req, res) => res.send("VIDEO UPLOAD PAGE");
-export const handleVideoDelete = (req, res) => res.send("VIDEO DELETE PAGE");
+
+export const handleVideoDelete = async (req, res) => {
+	const { id } = req.params;
+	await Video.findByIdAndDelete(id);
+	return res.redirect("/");
+  };
