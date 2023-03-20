@@ -63,11 +63,51 @@ export const handleUserLoginPOST = async (req, res) => {
 	return res.redirect("/");
 };
 
+export const handleUserEditGET = (req, res) => {
+	return res.render("edit-profile.pug", { pageTitle: "Edit Profile" });
+};
+
+export const handleUserEditPOST = async (req, res) => {
+	const {
+		session: {
+			user: { _id },
+		},
+		body: { name, email, username, location },
+	} = req;
+
+	const exist = await User.exists({
+		$and: [
+			{ _id: { $ne: _id } }, //다른 아이디 중에서 찾을때..
+			{ $or: [{ username: username }, { email: email }] },
+		],
+	});
+
+	if (exist) {
+		req.flash("error", "This username/email already taken.");
+		return res.status(400).render("edit-profile.pug", {
+			pageTitle: "Edit Profile",
+		});
+	}
+
+	const updatedUser = await User.findByIdAndUpdate(
+		_id,
+		{
+			name,
+			email,
+			username,
+			location,
+		},
+		{ new: true } //이전 데이터 지우고 새 오브젝트만 db에 저장
+	);
+	req.session.user = updatedUser; //session업데이트 안 하면 db만 업데이트 됨
+	return res.redirect("/users/edit");
+};
+
 export const handleUserDelete = (req, res) => res.send("USER DELETE PAGE");
 
 export const handleUserLogout = (req, res) => {
 	req.session.destroy();
 	return res.redirect("/");
-  };
+};
 
 export const handleUserProfile = (req, res) => res.send("USER PROFILE PAGE");

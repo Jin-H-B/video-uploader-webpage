@@ -1,11 +1,12 @@
 import express from "express";
-import { handleUserEdit, handleUserDelete, handleUserProfile, handleUserLogout } from "../controllers/userController.js";
+import { handleUserDelete, handleUserProfile, handleUserLogout, handleUserEditGET, handleUserEditPOST } from "../controllers/userController.js";
+import { protectorMiddleware, publicOnlyMiddleware } from "../middlewares";
 
 const userRouter = express.Router();
 
-userRouter.get("/logout", handleUserLogout);
-userRouter.get("/:id", handleUserProfile);
-userRouter.get("/edit", handleUserEdit);
+userRouter.get("/logout",  protectorMiddleware, handleUserLogout);
+userRouter.route("/edit").all(protectorMiddleware).get(handleUserEditGET).post(handleUserEditPOST);
 userRouter.get("/delete", handleUserDelete);
+userRouter.get("/:id", handleUserProfile);
 
 export default userRouter;
