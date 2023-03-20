@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 mongoose.connect(
 	'mongodb://mongo:27017/videodb', // mongodb://[container name or ipddress]:27017/[dbname]
-	{ useNewUrlParser: true, useUnifiedTopology : true },
+	{ useNewUrlParser: true },
 );
 
 const db = mongoose.connection;

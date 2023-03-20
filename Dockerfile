@@ -18,6 +18,7 @@ RUN npm install --save-dev -g nodemon
 # RUN npm install -g morgan
 # RUN npm install -g pug
 # RUN npm install -g mongoose
+# RUN npm install -g bcrypt
 
 COPY . .
 

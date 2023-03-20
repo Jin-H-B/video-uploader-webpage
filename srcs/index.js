@@ -1,5 +1,6 @@
 import "./db.js"; // connect to mongodb
 import "./models/videoSchema.js"; // mongodb schema for video data
+import "./models/userSchema.js"; // login user schema
 import express from "express"; // web server
 import morgan from "morgan"; // server logger
 import globalRouter from "./routers/globalRouter";

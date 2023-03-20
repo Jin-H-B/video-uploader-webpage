@@ -4,15 +4,18 @@ html(lang="ko")
 		title #{pageTitle} | Youtube-clone
 		link(rel="stylesheet" href="https://unpkg.com/mvp.css")
 	body
-		h1=pageTitle
-			nav
-				ul
-					li
-						a(href="/videos/upload") Upload Video
-					li
-						a(href="/") Home
-					li
-						a(href="/search") Search
+		header
+			h1=pageTitle
+				nav
+					ul
+						li
+							a(href="/videos/upload") Upload Video
+						li
+							a(href="/") Home
+						li
+							a(href="/search") Search
+						li
+							a(href="/join")  Join
 		main
 			block content
 	include partials/footer.pug
