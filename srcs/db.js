@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import "dotenv/config";
 
 mongoose.connect(
-	'mongodb://mongo:27017/videodb', // mongodb://[container name or ipddress]:27017/[dbname]
+	process.env.DB_URL, // mongodb://[container name or ipddress]:27017/[dbname]
 	{ useNewUrlParser: true },
 );
 
