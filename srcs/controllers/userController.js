@@ -103,11 +103,46 @@ export const handleUserEditPOST = async (req, res) => {
 	return res.redirect("/users/edit");
 };
 
-export const handleUserDelete = (req, res) => res.send("USER DELETE PAGE");
 
 export const handleUserLogout = (req, res) => {
 	req.session.destroy();
 	return res.redirect("/");
 };
 
+export const handleChangePwdGET = (req, res) => {
+	if (req.session.user.socialOnly === true) {
+		return res.redirect("/");
+	}
+	return res.render("users/change-pwd.pug", { pageTitle: "Change Password" });
+};
+
+export const handleChangePwdPOST = async (req, res) => {
+	const {
+		session: {
+			user: { _id },
+		},
+		body: { oldPassword, newPassword, newPasswordConfirmation },
+	} = req;
+	const user = await User.findById(_id);
+	const ok = await bcrypt.compare(oldPassword, user.password);
+	if (!ok) {
+		return res.status(400).render("users/change-password", {
+			pageTitle: "Change Password",
+			errorMessage: "The current password is incorrect",
+		});
+	}
+	if (newPassword !== newPasswordConfirmation) {
+		return res.status(400).render("users/change-password", {
+			pageTitle: "Change Password",
+			errorMessage: "The password does not match the confirmation",
+		});
+	}
+	user.password = newPassword;
+	await user.save();
+	return res.redirect("/users/logout");
+};
+
+
+export const handleUserDelete = (req, res) => res.send("USER DELETE PAGE");
 export const handleUserProfile = (req, res) => res.send("USER PROFILE PAGE");
+
