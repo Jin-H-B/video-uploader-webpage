@@ -63,10 +63,11 @@ export const handleUserLoginPOST = async (req, res) => {
 	return res.redirect("/");
 };
 
-
-
-export const handleUserEdit = (req, res) => res.send("USER EDIT PAGE");
 export const handleUserDelete = (req, res) => res.send("USER DELETE PAGE");
 
-export const handleUserLogout = (req, res) => res.send("USER LOGOUT");
+export const handleUserLogout = (req, res) => {
+	req.session.destroy();
+	return res.redirect("/");
+  };
+
 export const handleUserProfile = (req, res) => res.send("USER PROFILE PAGE");
