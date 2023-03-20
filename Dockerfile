@@ -19,6 +19,7 @@ RUN npm install --save-dev -g nodemon
 # RUN npm install -g express-session
 # RUN npm install -g connect-mongo
 # RUN npm install -g dotenv
+# RUN npm install -g multer
 
 COPY . .
 

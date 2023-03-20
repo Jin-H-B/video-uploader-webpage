@@ -12,7 +12,7 @@ import videoRouter from "./routers/videoRouter";
 import { localsMiddleware } from "./middlewares";
 
 const app = express();
-const logger = morgan("dev"); // server log options : combined, common, dev, short, tiny
+const logger = morgan("combined"); // server log options : combined, common, dev, short, tiny
 
 const PORT = 3000;
 
@@ -32,6 +32,7 @@ app.use(
 );
 
 app.use(localsMiddleware);
+app.use("/uploads", express.static("uploads")); //express.static("[노출 시키려는 폴더]")
 app.use("/", globalRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);

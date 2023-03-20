@@ -64,15 +64,16 @@ export const handleUserLoginPOST = async (req, res) => {
 };
 
 export const handleUserEditGET = (req, res) => {
-	return res.render("edit-profile.pug", { pageTitle: "Edit Profile" });
+	return res.render("edit-profile.pug", { pageTitle: "Edit Profile",  });
 };
 
 export const handleUserEditPOST = async (req, res) => {
 	const {
 		session: {
-			user: { _id },
+			user: { _id, avatarUrl },
 		},
 		body: { name, email, username, location },
+		file //multer 사용으로 req.file 사용 가능
 	} = req;
 
 	const exist = await User.exists({
@@ -83,7 +84,6 @@ export const handleUserEditPOST = async (req, res) => {
 	});
 
 	if (exist) {
-		req.flash("error", "This username/email already taken.");
 		return res.status(400).render("edit-profile.pug", {
 			pageTitle: "Edit Profile",
 		});
@@ -92,6 +92,7 @@ export const handleUserEditPOST = async (req, res) => {
 	const updatedUser = await User.findByIdAndUpdate(
 		_id,
 		{
+			avatarUrl: file ? file.path : avatarUrl,
 			name,
 			email,
 			username,
@@ -99,6 +100,7 @@ export const handleUserEditPOST = async (req, res) => {
 		},
 		{ new: true } //이전 데이터 지우고 새 오브젝트만 db에 저장
 	);
+
 	req.session.user = updatedUser; //session업데이트 안 하면 db만 업데이트 됨
 	return res.redirect("/users/edit");
 };
@@ -110,9 +112,6 @@ export const handleUserLogout = (req, res) => {
 };
 
 export const handleChangePwdGET = (req, res) => {
-	if (req.session.user.socialOnly === true) {
-		return res.redirect("/");
-	}
 	return res.render("users/change-pwd.pug", { pageTitle: "Change Password" });
 };
 
