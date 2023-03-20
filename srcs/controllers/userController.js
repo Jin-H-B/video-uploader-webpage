@@ -1,4 +1,5 @@
 import User from "../models/userSchema.js";
+import bcrypt from "bcrypt";
 
 export const handleUserJoinGET = (req, res) => res.render("join.pug", { pageTitle: "Join" });
 
@@ -34,6 +35,33 @@ export const handleUserJoinPOST = async (req, res) => {
 		});
 	}
 };
+
+
+export const handleUserLoginGET = (req, res) =>
+	res.render("login", { pageTitle: "Login" });
+
+export const handleUserLoginPOST = async (req, res) => {
+	const { username, password } = req.body;
+	const pageTitle = "Login";
+	const user = await User.findOne({ username });
+	if (!user) {
+		return res.status(400).render("login", {
+			pageTitle: "Login",
+			pageTitle,
+			errorMessage: "An account with this username does not exists.",
+		});
+	}
+	const ok = await bcrypt.compare(password, user.password);
+	if (!ok) {
+		return res.status(400).render("login", {
+			pageTitle,
+			errorMessage: "Wrong password",
+		});
+	}
+	return res.redirect("/");
+};
+
+
 
 export const handleUserEdit = (req, res) => res.send("USER EDIT PAGE");
 export const handleUserDelete = (req, res) => res.send("USER DELETE PAGE");

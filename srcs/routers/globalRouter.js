@@ -1,12 +1,12 @@
 import express from "express";
-import { handleUserJoinGET, handleUserJoinPOST, handleUserLogin } from "../controllers/userController.js";
+import { handleUserJoinGET, handleUserJoinPOST, handleUserLoginGET, handleUserLoginPOST } from "../controllers/userController.js";
 import { handleVideoTrending, handleVideoSearch } from "../controllers/videoController.js";
 
 const globalRouter = express.Router();
 
 globalRouter.get("/", handleVideoTrending);
 globalRouter.route("/join").get(handleUserJoinGET).post(handleUserJoinPOST);
-globalRouter.get("/login", handleUserLogin);
+globalRouter.route("/login").get(handleUserLoginGET).post(handleUserLoginPOST);
 globalRouter.get("/search", handleVideoSearch);
 
 export default globalRouter;
