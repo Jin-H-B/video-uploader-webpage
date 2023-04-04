@@ -6,7 +6,7 @@ all: up
 db:
 	@mkdir -p $(LOCAL_VOLUME_DB)
 
-up:
+up: db
 	@docker-compose -f ./docker-compose.yml up
 
 down:

@@ -1,4 +1,4 @@
-# youtube clone
+# video upload webpage
 
 ### global routers
 / -> home
@@ -29,3 +29,7 @@ https://www.mongodb.com/docs/manual/tutorial/install-mongodb-community-with-dock
 
 ### tools
 multer(file upload middleware): https://www.npmjs.com/package/multer
+
+### dotenv example
+DB_URL=mongodb://mongo:27017/videodb
+COOKIE_SECRET=s0meSecretString012673$#@%

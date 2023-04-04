@@ -3,8 +3,8 @@ version: '2'
 services:
   server:
     build: ./
-    container_name: youtube_clone
-    image: youtube_clone
+    container_name: video_webpage
+    image: video_webpage
     ports:
       - "8080:3000"
     restart: always
